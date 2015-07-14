@@ -117,7 +117,7 @@ DVT.parser.prototype.parse = function( data, object, loader) {//console.count('p
  *          data The data array to analyze.
  * @return {!Array} An array with length 2 containing the [min, max] values.
  */
-DVT.parser.prototype.arrayMinMax = function(data) {//console.count('parser.arrayminmax');
+/*DVT.parser.prototype.arrayMinMax = function(data) {//console.count('parser.arrayminmax');
 
     var _min = Infinity;
     var _max = -Infinity;
@@ -140,7 +140,7 @@ DVT.parser.prototype.arrayMinMax = function(data) {//console.count('parser.array
 
     return [ _min, _max ];
 
-};
+};*/
 
 
 /**
