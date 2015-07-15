@@ -101,7 +101,7 @@ DVT.renderer = function(){
      * @type {Array}
      * @private
      */
-    this._topLevelObjects = [];
+    //this._topLevelObjects = [];
 
     /**
      * The loader associated with this renderer.
@@ -288,7 +288,7 @@ DVT.renderer.prototype.add = function(object) {//console.count('renderer.add');
 
     // we know that objects which are directly added using this function are def.
     // top-level objects, meaning that they do not have a parent
-    this._topLevelObjects.push(object);
+    //this._topLevelObjects.push(object);
 
     //attach listener to object
     goog.events.listen(object, 'PROCESSED',function(e){this.update_(e.target);},false,this);
