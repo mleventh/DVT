@@ -6,7 +6,7 @@
 //
 
 
-    console.log('Testing the DEV tree.');
+    //console.log('Testing the DEV tree.');
 
 //  goog.require('DVT.renderer2D');
     //console.log('!!!');
