@@ -9,9 +9,9 @@
     console.log('Testing the DEV tree.');
 
 //  goog.require('DVT.renderer2D');
-    console.log('!!!');
+    //console.log('!!!');
     goog.require('DVT.renderer3D');
-    console.log('!!');
+    //console.log('!!');
     goog.require('DVT.fiber');
 
 /**

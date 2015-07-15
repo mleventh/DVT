@@ -250,7 +250,7 @@ DVT.renderer3D.prototype.init = function() {//console.count('renderer3D.init');
  * @inheritDoc
  */
 DVT.renderer3D.prototype.update_ = function(object) {//console.count('renderer3D.update_');
-    console.log('function call: update_ in renderer3D')
+    //console.log('function call: update_ in renderer3D')
     // call the update_ method of the superclass
     goog.base(this, 'update_', object);
 
@@ -265,7 +265,7 @@ DVT.renderer3D.prototype.update_ = function(object) {//console.count('renderer3D
         existed = true;
 
     }
-    console.log(this.get(object));
+    //console.log(this.get(object));
     var loaded = object._loaded;
     var locked = object._locked;
 
@@ -372,7 +372,7 @@ DVT.renderer3D.prototype.update_ = function(object) {//console.count('renderer3D
     if (!loaded) {
         // this object is based on an external file and it is dirty..
         if (!locked) {
-            console.log('Function call: update_ in renderer3D message: load ');
+            //console.log('Function call: update_ in renderer3D message: load ');
             // start loading..
             this._loader.load(object);
         }
