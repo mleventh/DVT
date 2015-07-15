@@ -182,7 +182,7 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
 
         }
         currentPoints.computeBoundingBox();
-        currentPoints.computeFaceNormals();
+        //currentPoints.computeFaceNormals();
         currentPoints.computeVertexNormals();
         offset += numPoints * 3 + numPoints * numberOfScalars + 1;
 
