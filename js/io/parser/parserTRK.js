@@ -245,28 +245,47 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
 
     //update function for each particle animation
     particles.update = function(){
-        
-    	var particle = fibers.vertices[i];
-        var path = particle.path;
-        particle.lerpN += 0.05;
-        if(particle.lerpN > 1){
-          particle.lerpN = 0;
-          particle.moveIndex = particle.nextIndex;
-          particle.nextIndex++;
-          if( particle.nextIndex >= path.length ){
-            particle.moveIndex = 0;
-            particle.nextIndex = 1;
-          }
+    
+    	for(i=0; i < numberOfFibers; i++){
+    		var desiredIndex = i / numParticles * animationPoints.length;
+    		  var rIndex = constrain(Math.floor(desiredIndex),0,animationPoints.length-1);
+    		  var particle = new THREE.Vector3();
+    		  var particle = animationPoints[rIndex].clone();
+    		  particle.moveIndex = rIndex;
+    		  particle.nextIndex = rIndex+1;
+    		  if(particle.nextIndex >= animationPoints.length )
+    		    particle.nextIndex = 0;
+    		  particle.lerpN = 0;
+    		  particle.path = animationPoints;
+    		  particleGeometry.vertices.push( particle );
+    		  
+    	}
+    		for(j=0; j< numPoints; j++){
+    			
+    			var particle = this.geometry.vertices[i];
+    		    var path = particle.path;
+    		    particle.lerpN += 0.05;
+    		    if(particle.lerpN > 1){
+    		      particle.lerpN = 0;
+    		      particle.moveIndex = particle.nextIndex;
+    		      particle.nextIndex++;
+    		      if( particle.nextIndex >= path.length ){
+    		        particle.moveIndex = 0;
+    		        particle.nextIndex = 1;
+    		      }
+    		    }
 
-        var currentPoint = path[particle.moveIndex];
-        var nextPoint = path[particle.nextIndex];
+    		    var currentPoint = path[particle.moveIndex];
+    		    var nextPoint = path[particle.nextIndex];
 
 
-        particle.copy( currentPoint );
-        particle.lerp( nextPoint, particle.lerpN );
-      }
-      fibers.verticesNeedUpdate = true;
-    };
+    		    particle.copy( currentPoint );
+    		    particle.lerp( nextPoint, particle.lerpN );
+    		  }
+    		  this.geometry.verticesNeedUpdate = true;
+    		};
+    		
+    	
 
     // move tracks to RAS space (note: we switch from row-major to column-major by transposing)
     //DVT.matriDVT.transpose(header.vox_to_ras, object._transform._matrix);
