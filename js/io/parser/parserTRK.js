@@ -193,80 +193,80 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
         // append this track to our fibers list
         var curLine = new THREE.Line(currentPoints, lineMaterial);
         fibers.add(curLine);
-        
-        function generateSprite() {
-        	
-        	var canvas = document.createElement('canvas');
-        	canvas.width = 1127;
-        	canvas.height = 594;
-        	
-        	var context = canvas.getContext('2d');
-        	var gradient = context.createRadialGradient(
-        		canvas.width/2, canvas.height/2,
-        		0,
-        		canvas.width/2, canvas.height/2,
-        		canvas.width/2);
-        	
-        	gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-        	gradient.addColorStop(0.2, 'rgba(255, 255, 255, 1)');
-        	gradient.addColorStop(0.4, 'rgba(0, 0, 64, 1)');
-        	gradient.addColorStop(1, 'rgba(0, 0, 0, 1)');
-        	
-        	context.fillStyle = gradient;
-        	context.fillRect(0, 0, canvas.width, canvas.height);
-        	
-        	var texture = new THREE.Texture(canvas);
-        	texture.needsUpdate = true;
-        	return texture;
-        }       	      	
-        	
-        function createParticleSystem(fibers){
-        	
-        	var material = new THREE.PointCloudMaterial({
-        		color: 0xffffff,
-        		size: 3,
-        		transparent: true,
-        		blending: THREE.AdditiveBlending,
-        		map: generateSprite()
-        	})
-        	
-        	var system = new THREE.PointCloud(fibers, material);
-        	system.sortParticles = true;
-        	return system;
-        	
-        }        
-        
-        var particles = createParticleSystem(fibers);
-        particles.sortParticles = true;
-        particles.dynamic = true;
-
-
-        //update function for each particle animation
-        particles.update = function(){
-            
-        	var particle = fibers.vertices[i];
-            var path = particle.path;
-            particle.lerpN += 0.05;
-            if(particle.lerpN > 1){
-              particle.lerpN = 0;
-              particle.moveIndex = particle.nextIndex;
-              particle.nextIndex++;
-              if( particle.nextIndex >= path.length ){
-                particle.moveIndex = 0;
-                particle.nextIndex = 1;
-              }
-
-            var currentPoint = path[particle.moveIndex];
-            var nextPoint = path[particle.nextIndex];
-
-
-            particle.copy( currentPoint );
-            particle.lerp( nextPoint, particle.lerpN );
-          }
-          fibers.verticesNeedUpdate = true;
-        };
 
     } // end of loop through all tracks
+    
+    function generateSprite() {
+    	
+    	var canvas = document.createElement('canvas');
+    	canvas.width = 1127;
+    	canvas.height = 594;
+    	
+    	var context = canvas.getContext('2d');
+    	var gradient = context.createRadialGradient(
+    		canvas.width/2, canvas.height/2,
+    		0,
+    		canvas.width/2, canvas.height/2,
+    		canvas.width/2);
+    	
+    	gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+    	gradient.addColorStop(0.2, 'rgba(255, 255, 255, 1)');
+    	gradient.addColorStop(0.4, 'rgba(0, 0, 64, 1)');
+    	gradient.addColorStop(1, 'rgba(0, 0, 0, 1)');
+    	
+    	context.fillStyle = gradient;
+    	context.fillRect(0, 0, canvas.width, canvas.height);
+    	
+    	var texture = new THREE.Texture(canvas);
+    	texture.needsUpdate = true;
+    	return texture;
+    }       	      	
+    	
+    function createParticleSystem(fibers){
+    	
+    	var material = new THREE.PointCloudMaterial({
+    		color: 0xffffff,
+    		size: 3,
+    		transparent: true,
+    		blending: THREE.AdditiveBlending,
+    		map: generateSprite()
+    	})
+    	
+    	var system = new THREE.PointCloud(fibers, material);
+    	system.sortParticles = true;
+    	return system;
+    	
+    }        
+    
+    var particles = createParticleSystem(fibers);
+    particles.sortParticles = true;
+    particles.dynamic = true;
+
+
+    //update function for each particle animation
+    particles.update = function(){
+        
+    	var particle = fibers.vertices[i];
+        var path = particle.path;
+        particle.lerpN += 0.05;
+        if(particle.lerpN > 1){
+          particle.lerpN = 0;
+          particle.moveIndex = particle.nextIndex;
+          particle.nextIndex++;
+          if( particle.nextIndex >= path.length ){
+            particle.moveIndex = 0;
+            particle.nextIndex = 1;
+          }
+
+        var currentPoint = path[particle.moveIndex];
+        var nextPoint = path[particle.nextIndex];
+
+
+        particle.copy( currentPoint );
+        particle.lerp( nextPoint, particle.lerpN );
+      }
+      fibers.verticesNeedUpdate = true;
+    };
 
     // move tracks to RAS space (note: we switch from row-major to column-major by transposing)
     //DVT.matriDVT.transpose(header.vox_to_ras, object._transform._matrix);
