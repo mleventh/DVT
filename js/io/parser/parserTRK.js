@@ -197,8 +197,8 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
         function generateSprite() {
         	
         	var canvas = document.createElement('canvas');
-        	canvas.width = 16;
-        	canvas.height = 16;
+        	canvas.width = 1127;
+        	canvas.height = 594;
         	
         	var context = canvas.getContext('2d');
         	var gradient = context.createRadialGradient(
@@ -222,7 +222,7 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
         	
         function createParticleSystem(fibers){
         	
-        	var material = new THREE.ParticleBasicMaterial({
+        	var material = new THREE.PointCloudMaterial({
         		color: 0xffffff,
         		size: 3,
         		transparent: true,
@@ -230,7 +230,7 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
         		map: generateSprite()
         	})
         	
-        	var system = new THREE.ParticleSystem(fibers, material);
+        	var system = new THREE.PointCloud(fibers, material);
         	system.sortParticles = true;
         	return system;
         	
