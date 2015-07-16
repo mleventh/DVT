@@ -178,23 +178,7 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
             // increase the number of points if this is not the last track
             if (j < numPoints - 1) {
                 _totalPoints += 6;
-            }
-            
-            function createParticleSystem(fibers){
-            	
-            	var material = new THREE.ParticleBasicMaterial({
-            		color: 0xffffff,
-            		size: 3,
-            		transparent: true,
-            		blending: THREE.AdditiveBlending,
-            		map: generateSprite()
-            	})
-            	
-            	var system = new THREE.ParticleSystem(fibers, material);
-            	system.sortParticles = true;
-            	return system;
-            	
-            }                     	
+            }             	
 
         }
         currentPoints.computeBoundingBox();
@@ -209,6 +193,50 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
         // append this track to our fibers list
         var curLine = new THREE.Line(currentPoints, lineMaterial);
         fibers.add(curLine);
+        
+        function generateSprite() {
+        	
+        	var canvas = document.createElement('canvas');
+        	canvas.width = 16;
+        	canvas.height = 16;
+        	
+        	var context = canvas.getContext('2d');
+        	var gradient = context.createRadialGradient(
+        		canvas.width/2, canvas.height/2,
+        		0,
+        		canvas.width/2, canvas.height/2,
+        		canvas.width/2);
+        	
+        	gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+        	gradient.addColorStop(0.2, 'rgba(255, 255, 255, 1)');
+        	gradient.addColorStop(0.4, 'rgba(0, 0, 64, 1)');
+        	gradient.addColorStop(1, 'rgba(0, 0, 0, 1)');
+        	
+        	context.fillStyle = gradient;
+        	context.fillRect(0, 0, canvas.width, canvas.height);
+        	
+        	var texture = new THREE.Texture(canvas);
+        	texture.needsUpdate = true;
+        	return texture;
+        }       	      	
+        	
+        function createParticleSystem(fibers){
+        	
+        	var material = new THREE.ParticleBasicMaterial({
+        		color: 0xffffff,
+        		size: 3,
+        		transparent: true,
+        		blending: THREE.AdditiveBlending,
+        		map: generateSprite()
+        	})
+        	
+        	var system = new THREE.ParticleSystem(fibers, material);
+        	system.sortParticles = true;
+        	return system;
+        	
+        }        
+        
+        var signals = createParticleSystem(fibers);
 
     } // end of loop through all tracks
 
