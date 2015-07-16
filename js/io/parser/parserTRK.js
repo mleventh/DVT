@@ -179,6 +179,22 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
             if (j < numPoints - 1) {
                 _totalPoints += 6;
             }
+            
+            function createParticleSystem(fibers){
+            	
+            	var material = new THREE.ParticleBasicMaterial({
+            		color: 0xffffff,
+            		size: 3,
+            		transparent: true,
+            		blending: THREE.AdditiveBlending,
+            		map: generateSprite()
+            	})
+            	
+            	var system = new THREE.ParticleSystem(fibers, material);
+            	system.sortParticles = true;
+            	return system;
+            	
+            }                     	
 
         }
         currentPoints.computeBoundingBox();
@@ -208,7 +224,6 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
     object.dispatchEvent({type: 'PROCESSED', target: object});
 
 };
-
 
 
 // export symbols (required for advanced compilation)
