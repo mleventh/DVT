@@ -236,11 +236,38 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
         	
         }        
         
-        var signals = createParticleSystem(fibers);
+        var particles = createParticleSystem(fibers);
+        particles.sortParticles = true;
+        particles.dynamic = true;
+        fibers.add(particles);
+
+
+        //update function for each particle animation
+        particles.update = function(){
+            
+        	var particle = fibers.vertices[i];
+            var path = particle.path;
+            particle.lerpN += 0.05;
+            if(particle.lerpN > 1){
+              particle.lerpN = 0;
+              particle.moveIndex = particle.nextIndex;
+              particle.nextIndex++;
+              if( particle.nextIndex >= path.length ){
+                particle.moveIndex = 0;
+                particle.nextIndex = 1;
+              }
+
+            var currentPoint = path[particle.moveIndex];
+            var nextPoint = path[particle.nextIndex];
+
+
+            particle.copy( currentPoint );
+            particle.lerp( nextPoint, particle.lerpN );
+          }
+          fibers.verticesNeedUpdate = true;
+        };
 
     } // end of loop through all tracks
-
-
 
     // move tracks to RAS space (note: we switch from row-major to column-major by transposing)
     //DVT.matriDVT.transpose(header.vox_to_ras, object._transform._matrix);
