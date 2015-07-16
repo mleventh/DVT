@@ -239,7 +239,6 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
         var particles = createParticleSystem(fibers);
         particles.sortParticles = true;
         particles.dynamic = true;
-        fibers.add(particles);
 
 
         //update function for each particle animation
