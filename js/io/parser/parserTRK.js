@@ -240,48 +240,46 @@ function generateSprite() {
         var curLine = new THREE.Line(currentPoints, lineMaterial);
         fibers.add(curLine);
         
+        for ( i = 0; i < currentPoints; i ++ ) {
+        	  var desiredIndex = i / currentPoints * currentPoints.length;
+        	  var rIndex = constrain(Math.floor(desiredIndex),0,currentPoints.length-1);
+        	  var particle = new THREE.Vector3();
+        	  var particle = currentPoints[rIndex].clone();
+        	  particle.moveIndex = rIndex;
+        	  particle.nextIndex = rIndex+1;
+        	  if(particle.nextIndex >= currentPoints.length )
+        	    particle.nextIndex = 0;
+        	  particle.lerpN = 0;
+        	  particle.path = currentPoints;
+        	  fibers.vertices.push( particle );
+        	}
+        
         particles.sortParticles = true;
         particles.dynamic = true;
 
-
-        //update function for each particle animation
         particles.update = function(){
+        	  // var time = Date.now()
+        	    var particle = fibers.vertices[i];
+        	    var path = particle.path;
+        	    particle.lerpN += 0.05;
+        	    if(particle.lerpN > 1){
+        	      particle.lerpN = 0;
+        	      particle.moveIndex = particle.nextIndex;
+        	      particle.nextIndex++;
+        	      if( particle.nextIndex >= path.length ){
+        	        particle.moveIndex = 0;
+        	        particle.nextIndex = 1;
+        	    }
 
-        		var desiredIndex = j / numParticles * currentPoints.length;
-        		  var rIndex = constrain(Math.floor(desiredIndex),0,animationPoints.length-1);
-        		  var particle = new THREE.Vector3();
-        		  var particle = currentPoints[rIndex].clone();
-        		  particle.moveIndex = rIndex;
-        		  particle.nextIndex = rIndex+1;
-        		  if(particle.nextIndex >= currentPoints.length )
-        		    particle.nextIndex = 0;
-        		  particle.lerpN = 0;
-        		  particle.path = currentPoints;
-        		  particleGeometry.vertices.push( particle );
-        			
-        			var particle = this.geometry.vertices[j];
-        		    var path = particle.path;
-        		    particle.lerpN += 0.05;
-        		    if(particle.lerpN > 1){
-        		      particle.lerpN = 0;
-        		      particle.moveIndex = particle.nextIndex;
-        		      particle.nextIndex++;
-        		      if( particle.nextIndex >= path.length ){
-        		        particle.moveIndex = 0;
-        		        particle.nextIndex = 1;
-        		      }
-        		    
-
-        		    var currentPoint = path[particle.moveIndex];
-        		    var nextPoint = path[particle.nextIndex];
+        	    var currentPoint = path[particle.moveIndex];
+        	    var nextPoint = path[particle.nextIndex];
 
 
-        		    particle.copy( currentPoint );
-        		    particle.lerp( nextPoint, particle.lerpN );
-        		  }
-        		  this.geometry.verticesNeedUpdate = true;
-        		  particles.update();
-        		};
+        	    particle.copy( currentPoint );
+        	    particle.lerp( nextPoint, particle.lerpN );
+        	  }
+        	  this.fibers.verticesNeedUpdate = true;
+        	};
 
     } // end of loop through all tracks   		
     	
