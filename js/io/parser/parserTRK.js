@@ -117,7 +117,7 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
         // console.log(numPoints, offset);
 
 
-        var currentPoints = new THREE.Geometry()
+        var currentPoints = new THREE.BufferGeometry();
 
         var length = 0.0;
 
@@ -128,7 +128,7 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
             var x = _points[offset + j * 3 + j * numberOfScalars + 1];
             var y = _points[offset + j * 3 + j * numberOfScalars + 2];
             var z = _points[offset + j * 3 + j * numberOfScalars + 3];
-
+            
             // console.log(x, y, z);
 
             // read scalars
@@ -156,7 +156,8 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
                 min.z=vector.z
             if(vector.z>max.z)
                 max.z=vector.z
-            currentPoints.vertices.push(vector );
+            
+            currentPoints.vertices.fromGeometry(vector );
 
             // fiber length
             if (j > 0) {
