@@ -92,57 +92,12 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
 
     var i;
     var updateCheck = 0;
-    
     if(numberOfFibers === Infinity) {
         updateCheck = 100000;
     }
     else {
         updateCheck = Math.ceil(numberOfFibers / 100);
     }
-    
-function createParticleSystem(fibers){
-    	
-    	var material = new THREE.PointCloudMaterial({
-    		color: 0xffffff,
-    		size: 3,
-    		transparent: true,
-    		blending: THREE.AdditiveBlending,
-    		map: generateSprite()
-    	})
-    	
-    	var system = new THREE.PointCloud(fibers, material);
-    	system.sortParticles = true;
-    	return system;
-    	
-    }  
-
-function generateSprite() {
-	
-	var canvas = document.createElement('canvas');
-	canvas.width = 901;
-	canvas.height = 456;
-	
-	var context = canvas.getContext('2d');
-	var gradient = context.createRadialGradient(
-		canvas.width/2, canvas.height/2,
-		0,
-		canvas.width/2, canvas.height/2,
-		canvas.width/2);
-	
-	gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-	gradient.addColorStop(0.2, 'rgba(255, 255, 255, 1)');
-	gradient.addColorStop(0.4, 'rgba(0, 0, 64, 1)');
-	gradient.addColorStop(1, 'rgba(0, 0, 0, 1)');
-	
-	context.fillStyle = gradient;
-	context.fillRect(0, 0, canvas.width, canvas.height);
-	
-	var texture = new THREE.Texture(canvas);
-	texture.needsUpdate = true;
-	return texture;
-}       	      	
-    
-    var particles = new createParticleSystem(fibers);
 
     for (i = 0; i < numberOfFibers; i++) {
         if(i%updateCheck === 0)
@@ -165,7 +120,6 @@ function generateSprite() {
         var currentPoints = new THREE.Geometry()
 
         var length = 0.0;
-        
 
         // loop through the points of this fiber
         for ( var j = 0; j < numPoints; j++) {
@@ -224,7 +178,7 @@ function generateSprite() {
             // increase the number of points if this is not the last track
             if (j < numPoints - 1) {
                 _totalPoints += 6;
-            }             	
+            }
 
         }
         currentPoints.computeBoundingBox();
@@ -241,58 +195,8 @@ function generateSprite() {
         fibers.add(curLine);
 
     } // end of loop through all tracks
-    
-    
-    function render(){
-        for ( i = 0; i < currentPoints; i ++ ) {
-        	  var desiredIndex = i / currentPoints * currentPoints.length;
-        	  var rIndex = constrain(Math.floor(desiredIndex),0,currentPoints.length-1);
-        	  var particle = new THREE.Vector3();
-        	  var particle = currentPoints[rIndex].clone();
-        	  particle.moveIndex = rIndex;
-        	  particle.nextIndex = rIndex+1;
-        	  if(particle.nextIndex >= currentPoints.length )
-        	    particle.nextIndex = 0;
-        	  particle.lerpN = 0;
-        	  particle.path = currentPoints;
-        	  curLine.vertices.push( particle );
-        
-        particles.sortParticles = true;
-        particles.dynamic = true;
-
-        particles.update = function(){
-        	  // var time = Date.now()
-        	    var particle = curLine.vertices[i];
-        	    var path = particle.path;
-        	    particle.lerpN += 0.05;
-        	    if(particle.lerpN > 1){
-        	      particle.lerpN = 0;
-        	      particle.moveIndex = particle.nextIndex;
-        	      particle.nextIndex++;
-        	      if( particle.nextIndex >= path.length ){
-        	        particle.moveIndex = 0;
-        	        particle.nextIndex = 1;
-        	    }
-
-        	    var currentPoint = path[particle.moveIndex];
-        	    var nextPoint = path[particle.nextIndex];
 
 
-        	    particle.copy( currentPoint );
-        	    particle.lerp( nextPoint, particle.lerpN );
-        	  }
-        	  this.curLine.verticesNeedUpdate = true;
-        	};
-        	
-        	requestAnimationFrame(render);
-        }
-        	
-        }
-        
-    	var tempRenderer = new THREE.WebGLRenderer({ canvas: this._canvas, alpha : true} );
-        var rendering = new render(curLine, particles);
-        
-    	
 
     // move tracks to RAS space (note: we switch from row-major to column-major by transposing)
     //DVT.matriDVT.transpose(header.vox_to_ras, object._transform._matrix);
@@ -304,6 +208,7 @@ function generateSprite() {
     object.dispatchEvent({type: 'PROCESSED', target: object});
 
 };
+
 
 
 // export symbols (required for advanced compilation)
