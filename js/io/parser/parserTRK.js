@@ -119,8 +119,8 @@ function createParticleSystem(fibers){
 function generateSprite() {
 	
 	var canvas = document.createElement('canvas');
-	canvas.width = 1127;
-	canvas.height = 594;
+	canvas.width = 901;
+	canvas.height = 456;
 	
 	var context = canvas.getContext('2d');
 	var gradient = context.createRadialGradient(
@@ -142,7 +142,7 @@ function generateSprite() {
 	return texture;
 }       	      	
     
-    var particles = createParticleSystem(fibers);
+    var particles = new createParticleSystem(fibers);
 
     for (i = 0; i < numberOfFibers; i++) {
         if(i%updateCheck === 0)
@@ -255,15 +255,14 @@ function generateSprite() {
         	    particle.nextIndex = 0;
         	  particle.lerpN = 0;
         	  particle.path = currentPoints;
-        	  fibers.vertices.push( particle );
-        	}
+        	  curLine.vertices.push( particle );
         
         particles.sortParticles = true;
         particles.dynamic = true;
 
         particles.update = function(){
         	  // var time = Date.now()
-        	    var particle = fibers.vertices[i];
+        	    var particle = curLine.vertices[i];
         	    var path = particle.path;
         	    particle.lerpN += 0.05;
         	    if(particle.lerpN > 1){
@@ -283,12 +282,15 @@ function generateSprite() {
         	    particle.lerp( nextPoint, particle.lerpN );
         	  }
         	  this.fibers.verticesNeedUpdate = true;
+        	  var updated = particles.update.call();
         	};
+        	
+        	requestAnimationFrame(render);
+        }
         	
         }
         
     	var tempRenderer = new THREE.WebGLRenderer({ canvas: this._canvas, alpha : true} );
-    	requestAnimationFrame(render);
         var rendering = new render();
     	
 
