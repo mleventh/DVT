@@ -281,8 +281,7 @@ function generateSprite() {
         	    particle.copy( currentPoint );
         	    particle.lerp( nextPoint, particle.lerpN );
         	  }
-        	  this.fibers.verticesNeedUpdate = true;
-        	  var updated = particles.update.call();
+        	  this.curLine.verticesNeedUpdate = true;
         	};
         	
         	requestAnimationFrame(render);
@@ -291,7 +290,8 @@ function generateSprite() {
         }
         
     	var tempRenderer = new THREE.WebGLRenderer({ canvas: this._canvas, alpha : true} );
-        var rendering = new render();
+        var rendering = new render(curLine, particles);
+        
     	
 
     // move tracks to RAS space (note: we switch from row-major to column-major by transposing)
