@@ -240,6 +240,7 @@ function generateSprite() {
         var curLine = new THREE.Line(currentPoints, lineMaterial);
         fibers.add(curLine);
         
+        function render(){
         for ( i = 0; i < currentPoints; i ++ ) {
         	  var desiredIndex = i / currentPoints * currentPoints.length;
         	  var rIndex = constrain(Math.floor(desiredIndex),0,currentPoints.length-1);
@@ -280,6 +281,11 @@ function generateSprite() {
         	  }
         	  this.fibers.verticesNeedUpdate = true;
         	};
+        	
+        	webGLRenderer.render(scene, camera);
+        	requestAnimationFrame(render);
+        	
+        }
 
     } // end of loop through all tracks   		
     	
