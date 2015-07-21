@@ -117,7 +117,7 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
         // console.log(numPoints, offset);
 
 
-        var currentPoints = new THREE.BufferGeometry();
+        var currentPoints = new THREE.Geometry();
 
         var length = 0.0;
 
@@ -137,7 +137,7 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
             // Convert coordinates to world space by dividing by spacing
             x = x / header.voxel_size[0];
             y = y / header.voxel_size[1] + 0;
-            z = -z / header.voxel_size[2]+00;
+            z = -z / header.voxel_size[2]+ 00;
             var vector=new THREE.Vector3( x,  y, z )
             vector.applyProjection(m)
             vector.x-=0
@@ -157,7 +157,7 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
             if(vector.z>max.z)
                 max.z=vector.z
             
-            currentPoints.vertices.fromGeometry(vector );
+            currentPoints.vertices.push(vector);
 
             // fiber length
             if (j > 0) {
@@ -171,9 +171,9 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
 
                 //adds in vertex color values
                 if(j==1)
-                    currentPoints.colors.push( new THREE.Color( displacement[0]/curLength, displacement[1]/curLength, displacement[2]/curLength ))
+                    currentPoints.colors.push(new THREE.Color( displacement[0]/curLength, displacement[1]/curLength, displacement[2]/curLength ))
 
-                currentPoints.colors.push( new THREE.Color( displacement[0]/curLength, displacement[1]/curLength, displacement[2]/curLength ))
+                currentPoints.colors.push(new THREE.Color( displacement[0]/curLength, displacement[1]/curLength, displacement[2]/curLength ))
             }
 
             // increase the number of points if this is not the last track
@@ -182,11 +182,12 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
             }
 
         }
+                              
         currentPoints.computeBoundingBox();
-        currentPoints.computeFaceNormals();
+        currentPoints.computeFaceNormals();     
         currentPoints.computeVertexNormals();
         offset += numPoints * 3 + numPoints * numberOfScalars + 1;
-
+        var bufferGeometry = new THREE.BufferGeometry().fromGeometry(currentPoints);
 
         // read additional properties
         // var properties = this.scan('float', header.n_properties);
@@ -196,8 +197,6 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
         fibers.add(curLine);
 
     } // end of loop through all tracks
-
-
 
     // move tracks to RAS space (note: we switch from row-major to column-major by transposing)
     //DVT.matriDVT.transpose(header.vox_to_ras, object._transform._matrix);
