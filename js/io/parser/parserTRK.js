@@ -123,7 +123,7 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
         
         var positions = new Float32Array(numPoints * 3);
         
-        var values_color = new Float32Array(numPoints * 2);
+        var values_color = new Float32Array(numPoints * 3);
         
         var color = new THREE.Color();
 
@@ -180,9 +180,9 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
 
                 //adds in vertex color values
                 if(j==1)
-                	values_color[numPoints * 2 + 0 ] = new THREE.Color( displacement[0]/curLength, displacement[1]/curLength, displacement[2]/curLength)
+                	values_color[numPoints * 3 + 0 ] = new THREE.Color( displacement[0]/curLength, displacement[1]/curLength, displacement[2]/curLength)
 
-                values_color[numPoints * 2 + 1] = new THREE.Color( displacement[0]/curLength, displacement[1]/curLength, displacement[2]/curLength)
+                values_color[numPoints * 3 + 1] = new THREE.Color( displacement[0]/curLength, displacement[1]/curLength, displacement[2]/curLength)
             }
 
             // increase the number of points if this is not the last track
@@ -191,7 +191,8 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
             }
 
         }
-        currentPoints.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );                      
+        currentPoints.addAttribute('position', new THREE.BufferAttribute(positions, 3)); 
+        currentPoints.addAttribute('colors', new THREE.BufferAttribute(values_color, 3));
         currentPoints.computeBoundingBox();
         currentPoints.computeFaceNormals();     
         currentPoints.computeVertexNormals();
