@@ -121,7 +121,11 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
 
         var length = 0.0;
         
-        var positions = new Float32Array(numPoints * 3 );
+        var positions = new Float32Array(numPoints * 3);
+        
+        var values_color = new Float32Array(numPoints * 2);
+        
+        var color = new THREE.Color();
 
         // loop through the points of this fiber
         for ( var j = 0; j < numPoints; j++) {
@@ -176,9 +180,9 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
 
                 //adds in vertex color values
                 if(j==1)
-                    currentPoints.colors.push(new THREE.Color( displacement[0]/curLength, displacement[1]/curLength, displacement[2]/curLength ))
+                	values_color[numPoints * 2 + 0 ] = new THREE.Color( displacement[0]/curLength, displacement[1]/curLength, displacement[2]/curLength)
 
-                currentPoints.colors.push(new THREE.Color( displacement[0]/curLength, displacement[1]/curLength, displacement[2]/curLength ))
+                values_color[numPoints * 2 + 1] = new THREE.Color( displacement[0]/curLength, displacement[1]/curLength, displacement[2]/curLength)
             }
 
             // increase the number of points if this is not the last track
@@ -191,14 +195,13 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
         currentPoints.computeBoundingBox();
         currentPoints.computeFaceNormals();     
         currentPoints.computeVertexNormals();
-        offset += numPoints * 3 + numPoints * numberOfScalars + 1;
-        console.log(currentPoints);                
+        offset += numPoints * 3 + numPoints * numberOfScalars + 1;             
         
         // read additional properties
         // var properties = this.scan('float', header.n_properties);
 
         // append this track to our fibers list
-        var curLine = new THREE.Line(buffer, lineMaterial);
+        var curLine = new THREE.Line(currentPoints, lineMaterial);
         fibers.add(curLine);
         
 
