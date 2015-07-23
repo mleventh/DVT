@@ -117,17 +117,19 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
         // console.log(numPoints, offset);
 
 
-        var currentPoints = new THREE.Geometry();
+        var currentPoints = new THREE.BufferGeometry();
 
         var length = 0.0;
+        
+        var positions = new Float32Array( particles * 3 );
 
         // loop through the points of this fiber
         for ( var j = 0; j < numPoints; j++) {
 
             // read coordinates
-            var x = _points[offset + j * 3 + j * numberOfScalars + 1];
-            var y = _points[offset + j * 3 + j * numberOfScalars + 2];
-            var z = _points[offset + j * 3 + j * numberOfScalars + 3];
+        	positions[numPoints * 3 + 0] = _points[offset + j * 3 + j * numberOfScalars + 1];
+        	positions[numPoints * 3 + 1] = _points[offset + j * 3 + j * numberOfScalars + 2];
+        	positions[numPoints * 3 + 2] = _points[offset + j * 3 + j * numberOfScalars + 3];
             
             // console.log(x, y, z);
 
@@ -182,22 +184,23 @@ DVT.parserTRK.prototype.parse = function(object, data, loader) {//console.count(
             }
 
         }
-                              
+        currentPoints.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );                      
         currentPoints.computeBoundingBox();
         currentPoints.computeFaceNormals();     
         currentPoints.computeVertexNormals();
         offset += numPoints * 3 + numPoints * numberOfScalars + 1;
-        var bufferGeometry = new THREE.BufferGeometry().fromGeometry(currentPoints);
-
+        console.log(currentPoints);                
+        
         // read additional properties
         // var properties = this.scan('float', header.n_properties);
 
         // append this track to our fibers list
-        var curLine = new THREE.Line(currentPoints, lineMaterial);
+        var curLine = new THREE.Line(buffer, lineMaterial);
         fibers.add(curLine);
+        
 
     } // end of loop through all tracks
-
+    
     // move tracks to RAS space (note: we switch from row-major to column-major by transposing)
     //DVT.matriDVT.transpose(header.vox_to_ras, object._transform._matrix);
 
