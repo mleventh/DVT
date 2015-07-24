@@ -58,7 +58,7 @@ DVT.parserSTL.prototype.parse = function(container, object, data, flag) {
     	
     );
     
-    n.vertices.push(
+    n.normals.push(
     	new THREE.Vector(data.byteLength, 0, 0)	
     );
     
@@ -88,7 +88,7 @@ DVT.parserSTL.prototype.parse = function(container, object, data, flag) {
         	
         );
         
-        n.vertices.push(
+        n.normals.push(
         	new THREE.Vector(_triangleCount * 9, 0, 0)	
         );
     // parse the bytes
@@ -106,10 +106,10 @@ DVT.parserSTL.prototype.parse = function(container, object, data, flag) {
 
 
 /**
- * Parses ASCII .STL data and modifies the given X.triplets containers.
+ * Parses ASCII .STL data and modifies the given containers.
  * 
- * @param {!X.triplets} p The object's points as a X.triplets container.
- * @param {!X.triplets} n The object's normals as a X.triplets container.
+ * @param {THREEContainer} p The object's points as a container.
+ * @param {THREEContainer} n The object's normals as a container.
  * @param {!Uint8Array} data The data to parse.
  * @protected
  */
@@ -151,12 +151,14 @@ DVT.parserSTL.prototype.parseASCII = function(p, n, data) {
         
         if (_normalsMode) {
           // add the normals 3x (for each vertex)
-          n.add(x, y, z);
-          n.add(x, y, z);
-          n.add(x, y, z);
+          n.normals.push(
+        		  new THREE.Vector3(x, y, z),
+        		  new THREE.Vector3(x, y, z),
+        		  new THREE.Vector3(x, y, z)
+        		  );
         } else {
           // add the vertices
-          p.add(x, y, z);
+          p.vertices.push(new THREE.Vector3(x, y, z));
         }
         
         // reset the modes
@@ -197,8 +199,7 @@ DVT.parserSTL.prototype.parseASCII = function(p, n, data) {
 
 
 /**
- * Parses BINARY .STL data and modifies the given X.triplets containers.
- * Original embodiment by Matthew Goodman (meawoppl@gmail.com)
+ * Parses BINARY .STL data and modifies the given containers
  * 
  * 
  */
@@ -216,14 +217,18 @@ DVT.parserSTL.prototype.parseBIN = function(p, n, triangleCount) {
     var _normalZ = _bytes[2];
     
     // add them
-    n.add(_normalX, _normalY, _normalZ);
-    n.add(_normalX, _normalY, _normalZ);
-    n.add(_normalX, _normalY, _normalZ);
+    n.normals.push(
+    		new THREE.Vector3(_normalX, _normalY, _normalZ),
+    		new THREE.Vector3(_normalX, _normalY, _normalZ),
+    		new THREE.Vector3(_normalX, _normalY, _normalZ)
+    		)
     
     // now the vertices
-    p.add(_bytes[3], _bytes[4], _bytes[5]);
-    p.add(_bytes[6], _bytes[7], _bytes[8]);
-    p.add(_bytes[9], _bytes[10], _bytes[11]);
+    p.vertices.push(
+    		new THREE.Vector3(_bytes[3], _bytes[4], _bytes[5]),
+    		new THREE.Vector3(_bytes[6], _bytes[7], _bytes[8]),
+    		new THREE.Vector3(_bytes[9], _bytes[10], _bytes[11])
+    		)
     
     // jump 2 bytes
     this._dataPointer += 2;
