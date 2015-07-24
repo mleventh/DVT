@@ -8,6 +8,7 @@ goog.require('goog.events');
 goog.require('ProgressBar');
 goog.require('bootstrap');
 goog.require('DVT.parserTRK');
+goog.require('DVT.parserSTL');
 
 /**
  * creates a loadHelper object
@@ -151,6 +152,7 @@ DVT.loadHelper.prototype._parseInit = function(data) {//console.count('parseInit
     switch (this._extension) {
         case 'trk':
             var parser = new DVT.parserTRK();
+            var parser2 = new DVT.parserSTL()
             parser.parse(this._container, data, this);
             break;
         default:
