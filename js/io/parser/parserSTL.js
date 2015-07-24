@@ -36,8 +36,6 @@ goog.inherits(DVT.parserSTL, DVT.parser);
  * @inheritDoc
  */
 DVT.parserSTL.prototype.parse = function(container, object, data, flag) {
-
-  DVT.TIMER(this._classname + '.parse');
   
   this._data = data;
   
@@ -52,8 +50,17 @@ DVT.parserSTL.prototype.parse = function(container, object, data, flag) {
   if (_ascii_tag == 'solid') {
     
     // allocate memory using a good guess
-    object._points = p = new X.triplets(data.byteLength);
-    object._normals = n = new X.triplets(data.byteLength);
+    object._points = p = new THREE.Geometry();
+    object._normals = n = new THREE.Geometry();
+    
+    p.vertices.push(
+    	new THREE.Vector(data.byteLength, 0, 0)
+    	
+    );
+    
+    n.vertices.push(
+    	new THREE.Vector(data.byteLength, 0, 0)	
+    );
     
     // this is an ascii STL file
     this.parseASCII(p, n, this.scan('uchar', data.byteLength - 5));
@@ -73,15 +80,21 @@ DVT.parserSTL.prototype.parse = function(container, object, data, flag) {
     var _triangleCount = this.scan('uint');
     
     // allocate the exact amount of memory
-    object._points = p = new X.triplets(_triangleCount * 9);
-    object._normals = n = new X.triplets(_triangleCount * 9);
+    object._points = p = new THREE.Geometry();
+    object._normals = n = new THREE.Geometry();
     
+    p.vertices.push(
+        	new THREE.Vector(_triangleCount * 9, 0, 0)
+        	
+        );
+        
+        n.vertices.push(
+        	new THREE.Vector(_triangleCount * 9, 0, 0)	
+        );
     // parse the bytes
     this.parseBIN(p, n, _triangleCount);
     
   }
-  
-  X.TIMERSTOP(this._classname + '.parse');
   
   // the object should be set up here, so let's fire a modified event
   object.THREEContainer=mesh;
