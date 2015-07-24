@@ -4,7 +4,7 @@ goog.addDependency('../../../../../js/DVT.js', ['DVT'], ['jQuery'], false);
 goog.addDependency('../../../../../js/core/base.js', ['DVT.base'], ['DVT', 'goog.events', 'goog.events.EventTarget'], false);
 goog.addDependency('../../../../../js/events/eventsCore.js', ['DVT.eventCore'], [], false);
 goog.addDependency('../../../../../js/io/loader/listeners.js', ['DVT.listeners'], [], false);
-goog.addDependency('../../../../../js/io/loader/loadHelper.js', ['DVT.loadHelper'], ['DVT', 'DVT.parserTRK', 'ProgressBar', 'bootstrap', 'goog.events'], false);
+goog.addDependency('../../../../../js/io/loader/loadHelper.js', ['DVT.loadHelper'], ['DVT', 'DVT.parserSTL', 'DVT.parserTRK', 'ProgressBar', 'bootstrap', 'goog.events'], false);
 goog.addDependency('../../../../../js/io/loader/loader.js', ['DVT.loader'], ['DVT', 'DVT.loadHelper', 'jQuery'], false);
 goog.addDependency('../../../../../js/io/parser/parser.js', ['DVT.parser'], ['DVT.base'], false);
 goog.addDependency('../../../../../js/io/parser/parserSTL.js', ['DVT.parserSTL'], ['DVT.object', 'DVT.parser', 'THREE'], false);
