@@ -1,3 +1,5 @@
+goog.require('DVT.mesh');
+
 test = function() {
 
   // create a new test_renderer

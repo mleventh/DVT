@@ -29,7 +29,7 @@ DVT.mesh = function() {
 
 }
 
-// inherit from X.object
+// inherit from DVT.object
 goog.inherits(DVT.mesh, DVT.object);
 
 // export symbols (required for advanced compilation)
