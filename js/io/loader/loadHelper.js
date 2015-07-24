@@ -151,10 +151,14 @@ DVT.loadHelper.prototype.load = function () {//console.count('load');
 DVT.loadHelper.prototype._parseInit = function(data) {//console.count('parseInit');
     switch (this._extension) {
         case 'trk':
-            var parser = new DVT.parserTRK();
-            var parser2 = new DVT.parserSTL()
-            parser.parse(this._container, data, this);
+            var parser = new DVT.parserTRK();            
+            parser.parse(this._container, data, this);           
             break;
+
+        case 'stl':
+        	var parser = new DVT.parserSTL();
+        	parser.parse(this._container, data, this);        	
+        	 break;
         default:
             alert('Parser not found');
     }
