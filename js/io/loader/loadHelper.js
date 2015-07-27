@@ -247,6 +247,9 @@ DVT.loadHelper.prototype.isBinary = function () {//console.count('isBinary');
         case 'trk':
             return true;
             break;
+        case 'stl':
+        	return true;
+        	break;
         default:
             return false
     }

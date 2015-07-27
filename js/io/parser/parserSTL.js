@@ -3,7 +3,7 @@ goog.provide('DVT.parserSTL');
 
 // requires
 goog.require('DVT.parser');
-goog.require('DVT.object')
+goog.require('DVT.object');
 goog.require('THREE');
 
 /**
@@ -15,7 +15,7 @@ goog.require('THREE');
 DVT.parserSTL = function() {
 
   //
-  // call the standard constructor of X.base
+  // call the standard constructor of DVT.base
   goog.base(this);
   
   //
@@ -35,18 +35,19 @@ goog.inherits(DVT.parserSTL, DVT.parser);
 /**
  * @inheritDoc
  */
-DVT.parserSTL.prototype.parse = function(container, object, data, flag) {
+DVT.parserSTL.prototype.parse = function(container, data, object, flag) {
   
   this._data = data;
-  
 
   var p = object._points;
   var n = object._normals;
   
+
+  
   // parse 5 bytes
   var _ascii_tag = this.parseChars(this.scan('uchar', 5));
-  
   // check if this is an ascii STL file or a binary one
+  
   if (_ascii_tag == 'solid') {
     
     // allocate memory using a good guess
@@ -54,18 +55,20 @@ DVT.parserSTL.prototype.parse = function(container, object, data, flag) {
     object._normals = n = new THREE.Geometry();
     
     p.vertices.push(
-    	new THREE.Vector(data.byteLength, 0, 0)
+    	new THREE.Vector3(data.byteLength, 0, 0)
     	
     );
     
-    n.normals.push(
-    	new THREE.Vector(data.byteLength, 0, 0)	
+    n.faces.push(
+    	new THREE.Vector3(data.byteLength, 0, 0)   	
     );
+    
+    n.computeFaceNormals();
     
     // this is an ascii STL file
     this.parseASCII(p, n, this.scan('uchar', data.byteLength - 5));
     
-  } else {
+  } else {	  
     
     // this is a binary STL file
     // (http://en.wikipedia.org/wiki/STL_(file_format))
@@ -84,22 +87,25 @@ DVT.parserSTL.prototype.parse = function(container, object, data, flag) {
     object._normals = n = new THREE.Geometry();
     
     p.vertices.push(
-        	new THREE.Vector(_triangleCount * 9, 0, 0)
+        	new THREE.Vector3(_triangleCount * 9, 0, 0)
         	
         );
         
-        n.normals.push(
-        	new THREE.Vector(_triangleCount * 9, 0, 0)	
+        n.faces.push(
+        	new THREE.Vector3(_triangleCount * 9, 0, 0)	
         );
+        n.computeFaceNormals;
     // parse the bytes
     this.parseBIN(p, n, _triangleCount);
     
   }
   
+  
   // the object should be set up here, so let's fire a modified event
-  object.THREEContainer=mesh;
+  //object.THREEContainer = object;
   object._loaded = true;
   object._locked = false;
+  console.log(object)
   object.dispatchEvent({type: 'PROCESSED', target: object});
   
 };
@@ -108,15 +114,15 @@ DVT.parserSTL.prototype.parse = function(container, object, data, flag) {
 /**
  * Parses ASCII .STL data and modifies the given containers.
  * 
- * @param {THREEContainer} p The object's points as a container.
- * @param {THREEContainer} n The object's normals as a container.
+ * @param {THREEGeometry} p The object's points as a container.
+ * @param {THREEGeometry} n The object's normals as a container.
  * @param {!Uint8Array} data The data to parse.
  * @protected
  */
 DVT.parserSTL.prototype.parseASCII = function(p, n, data) {
 
   var _length = data.length;
-  
+ 
   //
   // the mode flags
   
@@ -132,11 +138,12 @@ DVT.parserSTL.prototype.parseASCII = function(p, n, data) {
   var i;
   for (i = 0; i < _length; i++) {
     
-    if (data[i] == 10) {
+    if (data[i] == 10) {    	
       
       // the current byte is a line break
       
       if (_normalsMode || _vertexMode) {
+
         
         // grab the bytes which contain the numbers
         var _substring = this.parseChars(data, _rangeStart, i);
@@ -204,7 +211,7 @@ DVT.parserSTL.prototype.parseASCII = function(p, n, data) {
  * 
  */
 DVT.parserSTL.prototype.parseBIN = function(p, n, triangleCount) {
-
+	
   var i = 0;
   for (i = 0; i < triangleCount; i++) {
     
@@ -217,11 +224,13 @@ DVT.parserSTL.prototype.parseBIN = function(p, n, triangleCount) {
     var _normalZ = _bytes[2];
     
     // add them
-    n.normals.push(
+    n.faces.push(
     		new THREE.Vector3(_normalX, _normalY, _normalZ),
     		new THREE.Vector3(_normalX, _normalY, _normalZ),
     		new THREE.Vector3(_normalX, _normalY, _normalZ)
     		)
+    		
+	n.computeFaceNormals();
     
     // now the vertices
     p.vertices.push(

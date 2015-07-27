@@ -257,6 +257,8 @@ DVT.parser.prototype.scan = function(type, chunks) {//console.count('parser.scan
             break;
 
     }
+    
+    console.log(this._data)
 
     // increase the data pointer in-place
     var _bytes = new _array_type(this._data.slice(this._dataPointer,
