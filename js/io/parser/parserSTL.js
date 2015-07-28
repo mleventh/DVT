@@ -39,7 +39,7 @@ goog.inherits(DVT.parserSTL, DVT.parser);
 DVT.parserSTL.prototype.parse = function(container, data, object, flag) {
   
   this._data = data;
-  mesh = new THREE.Object3D();
+  surface = new THREE.Object3D();
 
   var p = object._points;
   var n = object._normals;
@@ -96,7 +96,7 @@ DVT.parserSTL.prototype.parse = function(container, data, object, flag) {
         	new THREE.Vector3(_triangleCount * 9, 0, 0)	
         );  
         
-        //mesh.add(p, n);
+        //surface.add(p, n);
         
     // parse the bytes
     this.parseBIN(p, n, _triangleCount);
@@ -104,7 +104,7 @@ DVT.parserSTL.prototype.parse = function(container, data, object, flag) {
   
   
   // the object should be set up here, so let's fire a modified event
-  object.THREEContainer = mesh;
+  object.THREEContainer = surface;
   object._loaded = true;
   object._locked = false;  
   object.dispatchEvent({type: 'PROCESSED', target: object});
@@ -243,7 +243,7 @@ DVT.parserSTL.prototype.parseBIN = function(p, n, triangleCount) {
     this._dataPointer += 2;
     
   }
-  
+
 };
 
 // export symbols (required for advanced compilation)

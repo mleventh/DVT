@@ -8,7 +8,7 @@ test = function() {
   test_renderer = new DVT.renderer3D();
   test_renderer.init();
   
-  // load a .vtk file
+  // load a .stl file
   var surface1 = new DVT.mesh();
   surface1.file = 'data/example.stl';
   surface1.color = [1, 0, 0];

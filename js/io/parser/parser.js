@@ -82,7 +82,6 @@ DVT.parser = function() {//console.count('parser.constructor');
 // inherit from DVT.base
 goog.inherits(DVT.parser, DVT.base);
 
-
 /**
  * Parse data and configure the given object. When complete, a
  * DVT.parser.ModifiedEvent is fired.
@@ -118,7 +117,7 @@ DVT.parser.prototype.parse = function( data, object, loader) {//console.count('p
  * @return {!Array} An array with length 2 containing the [min, max] values.
  */
 DVT.parser.prototype.arrayMinMax = function(data) {//console.count('parser.arrayminmax');
-
+	
     var _min = Infinity;
     var _max = -Infinity;
 
