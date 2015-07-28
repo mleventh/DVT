@@ -35,14 +35,16 @@ goog.inherits(DVT.parserSTL, DVT.parser);
 /**
  * @inheritDoc
  */
+
 DVT.parserSTL.prototype.parse = function(container, data, object, flag) {
   
   this._data = data;
+  mesh = new THREE.Object3D();
 
   var p = object._points;
   var n = object._normals;
   
-
+ 
   
   // parse 5 bytes
   var _ascii_tag = this.parseChars(this.scan('uchar', 5));
@@ -59,17 +61,16 @@ DVT.parserSTL.prototype.parse = function(container, data, object, flag) {
     	
     );
     
-    n.faces.push(
+    n.vertices.push(
     	new THREE.Vector3(data.byteLength, 0, 0)   	
     );
     
-    n.computeFaceNormals();
-    
+    //mesh.add(p, n);
     // this is an ascii STL file
     this.parseASCII(p, n, this.scan('uchar', data.byteLength - 5));
     
   } else {	  
-    
+	  
     // this is a binary STL file
     // (http://en.wikipedia.org/wiki/STL_(file_format))
     
@@ -90,22 +91,22 @@ DVT.parserSTL.prototype.parse = function(container, data, object, flag) {
         	new THREE.Vector3(_triangleCount * 9, 0, 0)
         	
         );
-        
-        n.faces.push(
+            
+        n.vertices.push(
         	new THREE.Vector3(_triangleCount * 9, 0, 0)	
-        );
-        n.computeFaceNormals;
+        );  
+        
+        //mesh.add(p, n);
+        
     // parse the bytes
     this.parseBIN(p, n, _triangleCount);
-    
   }
   
   
   // the object should be set up here, so let's fire a modified event
-  //object.THREEContainer = object;
+  object.THREEContainer = mesh;
   object._loaded = true;
-  object._locked = false;
-  console.log(object)
+  object._locked = false;  
   object.dispatchEvent({type: 'PROCESSED', target: object});
   
 };
@@ -158,7 +159,7 @@ DVT.parserSTL.prototype.parseASCII = function(p, n, data) {
         
         if (_normalsMode) {
           // add the normals 3x (for each vertex)
-          n.normals.push(
+          n.vertices.push(
         		  new THREE.Vector3(x, y, z),
         		  new THREE.Vector3(x, y, z),
         		  new THREE.Vector3(x, y, z)
@@ -167,6 +168,7 @@ DVT.parserSTL.prototype.parseASCII = function(p, n, data) {
           // add the vertices
           p.vertices.push(new THREE.Vector3(x, y, z));
         }
+              
         
         // reset the modes
         _normalsMode = false;
@@ -224,13 +226,11 @@ DVT.parserSTL.prototype.parseBIN = function(p, n, triangleCount) {
     var _normalZ = _bytes[2];
     
     // add them
-    n.faces.push(
+    n.vertices.push(
     		new THREE.Vector3(_normalX, _normalY, _normalZ),
     		new THREE.Vector3(_normalX, _normalY, _normalZ),
     		new THREE.Vector3(_normalX, _normalY, _normalZ)
-    		)
-    		
-	n.computeFaceNormals();
+    		)		
     
     // now the vertices
     p.vertices.push(
