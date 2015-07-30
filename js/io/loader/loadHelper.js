@@ -157,8 +157,8 @@ DVT.loadHelper.prototype._parseInit = function(data) {//console.count('parseInit
 
         case 'stl':
         	var parser = new DVT.parserSTL();
-        	parser.parse(this._container, data, this);        	
-        	 break;
+        	parser.parse(this._container, data, this);
+        	break;
         default:
             alert('Parser not found');
     }
@@ -168,6 +168,7 @@ DVT.loadHelper.prototype.loadFailed = function () {//console.count('loadFailed')
     console.log('LOAD FAILED');
     alert('load failed');
 }
+
 
 /**
  * updates progressbar to reflect current loading status
@@ -187,16 +188,17 @@ DVT.loadHelper.prototype.updateLoad =function(oEvent) {//console.count('updateLo
  * @param oEvent the returned event
  */
 DVT.loadHelper.prototype.updateParse=function(percentComplete)
-{//console.count('updateParse');
-    this._parseLine.animate(percentComplete);
+{console.count('updateParse');
+    this._parseLine.animate(percentComplete);    
 };
+
 
 /**
  * updates progressbar to reflect current loading status
  * @param oEvent the returned event
  */
 DVT.loadHelper.prototype.updateRender=function(oEvent)
-{//console.count('updateRender');
+{console.count('updateRender');
     if (oEvent.lengthComputable) {
         var percentComplete = oEvent.loaded / oEvent.total;
         this._renderLine.animate(percentComplete);
@@ -244,7 +246,7 @@ DVT.loadHelper.prototype._removeElement=function(elementID, bar)
  */
 DVT.loadHelper.prototype.isBinary = function () {//console.count('isBinary');
     switch(this._extension) {
-        case 'trk':
+        case 'trk':        	
             return true;
             break;
         case 'stl':

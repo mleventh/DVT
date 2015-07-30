@@ -126,8 +126,6 @@ goog.inherits(DVT.renderer, DVT.base);
 
 
 
-
-
 /**
  * Resizes the control to fit the size of the container.
  */

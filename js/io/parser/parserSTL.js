@@ -36,15 +36,13 @@ goog.inherits(DVT.parserSTL, DVT.parser);
  * @inheritDoc
  */
 
-DVT.parserSTL.prototype.parse = function(container, data, object, flag) {
+DVT.parserSTL.prototype.parse = function(container, data, object, flag, loader) {
   
   this._data = data;
   surface = new THREE.Object3D();
 
   var p = object._points;
   var n = object._normals;
-  
- 
   
   // parse 5 bytes
   var _ascii_tag = this.parseChars(this.scan('uchar', 5));
@@ -65,9 +63,24 @@ DVT.parserSTL.prototype.parse = function(container, data, object, flag) {
     	new THREE.Vector3(data.byteLength, 0, 0)   	
     );
     
-    //mesh.add(p, n);
+    
+    var i;
+    var updateCheck = 0;
+    if(data.byteLength === Infinity) {
+        updateCheck = 100000;
+    }
+    else {
+        updateCheck = Math.ceil(data.byteLength / 100);
+    }
+
+    for (i = 0; i < data.byteLength; i++) {
+        if(i%updateCheck === 0)
+        {
+            loader.updateParse(i/data.byteLength);
+        }
+    }
     // this is an ascii STL file
-    this.parseASCII(p, n, this.scan('uchar', data.byteLength - 5));
+    this.parseASCII(p, n, this.scan('uchar', data.byteLength - 5), loader);
     
   } else {	  
 	  
@@ -95,20 +108,36 @@ DVT.parserSTL.prototype.parse = function(container, data, object, flag) {
         n.vertices.push(
         	new THREE.Vector3(_triangleCount * 9, 0, 0)	
         );  
-        
-        //surface.add(p, n);
-        
+
     // parse the bytes
     this.parseBIN(p, n, _triangleCount);
+    
+    var i;
+    var updateCheck = 0;
+    if(_triangleCount === Infinity) {
+        updateCheck = 100000;
+    }
+    else {
+        updateCheck = Math.ceil(_triangleCount / 100);
+    }
+
+    for (i = 0; i < _triangleCount; i++) {
+        if(i%updateCheck === 0)
+        {
+            loader.updateParse(i/_triangleCount);
+        }
+    }
   }
   
+ /* surface.add(object._points);
+  surface.add(object._normals);*/
   
   // the object should be set up here, so let's fire a modified event
   object.THREEContainer = surface;
   object._loaded = true;
   object._locked = false;  
   object.dispatchEvent({type: 'PROCESSED', target: object});
-  
+
 };
 
 
