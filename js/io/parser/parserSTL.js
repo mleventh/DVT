@@ -5,6 +5,7 @@ goog.provide('DVT.parserSTL');
 goog.require('DVT.parser');
 goog.require('DVT.object');
 goog.require('THREE');
+goog.require('DVT.loader');
 
 /**
  * Create a parser for the .STL format. ASCII or binary format is supported.
@@ -36,11 +37,12 @@ goog.inherits(DVT.parserSTL, DVT.parser);
  * @inheritDoc
  */
 
-DVT.parserSTL.prototype.parse = function(container, data, object, flag, loader) {
+DVT.parserSTL.prototype.parse = function(object, data, loader) {
   
   this._data = data;
+  this.loader = loader; 
   surface = new THREE.Object3D();
-
+  
   var p = object._points;
   var n = object._normals;
   
@@ -53,17 +55,16 @@ DVT.parserSTL.prototype.parse = function(container, data, object, flag, loader) 
     // allocate memory using a good guess
     object._points = p = new THREE.Geometry();
     object._normals = n = new THREE.Geometry();
-    
+       
     p.vertices.push(
     	new THREE.Vector3(data.byteLength, 0, 0)
     	
     );
-    
-    n.vertices.push(
+        
+    n.vertices.push(  
     	new THREE.Vector3(data.byteLength, 0, 0)   	
     );
-    
-    
+       
     var i;
     var updateCheck = 0;
     if(data.byteLength === Infinity) {
@@ -110,7 +111,7 @@ DVT.parserSTL.prototype.parse = function(container, data, object, flag, loader) 
         );  
 
     // parse the bytes
-    this.parseBIN(p, n, _triangleCount);
+    this.parseBIN(p, n, _triangleCount, loader);
     
     var i;
     var updateCheck = 0;
@@ -129,9 +130,6 @@ DVT.parserSTL.prototype.parse = function(container, data, object, flag, loader) 
     }
   }
   
- /* surface.add(object._points);
-  surface.add(object._normals);*/
-  
   // the object should be set up here, so let's fire a modified event
   object.THREEContainer = surface;
   object._loaded = true;
@@ -149,8 +147,8 @@ DVT.parserSTL.prototype.parse = function(container, data, object, flag, loader) 
  * @param {!Uint8Array} data The data to parse.
  * @protected
  */
-DVT.parserSTL.prototype.parseASCII = function(p, n, data) {
-
+DVT.parserSTL.prototype.parseASCII = function(p, n, data, loader) {
+  
   var _length = data.length;
  
   //
@@ -241,8 +239,10 @@ DVT.parserSTL.prototype.parseASCII = function(p, n, data) {
  * 
  * 
  */
-DVT.parserSTL.prototype.parseBIN = function(p, n, triangleCount) {
+DVT.parserSTL.prototype.parseBIN = function(p, n, triangleCount, loader) {
 	
+  this._loader = loader;	
+  
   var i = 0;
   for (i = 0; i < triangleCount; i++) {
     
