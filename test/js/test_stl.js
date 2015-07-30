@@ -18,7 +18,7 @@ test = function() {
   surface2.color = [1, 0, 0];	  
   
   // add the object
-  test_renderer.add(surface2);
+  test_renderer.add(surface1);
   
   // .. and render it
   test_renderer.render();
