@@ -5,7 +5,7 @@ goog.provide('DVT.parserSTL');
 goog.require('DVT.parser');
 goog.require('DVT.object');
 goog.require('THREE');
-goog.require('DVT.loader');
+//goog.require('DVT.loader');
 
 /**
  * Create a parser for the .STL format. ASCII or binary format is supported.
@@ -65,7 +65,7 @@ DVT.parserSTL.prototype.parse = function(object, data, loader) {
     	new THREE.Vector3(data.byteLength, 0, 0)   	
     );
        
-    var i;
+    /*var i;
     var updateCheck = 0;
     if(data.byteLength === Infinity) {
         updateCheck = 100000;
@@ -79,7 +79,7 @@ DVT.parserSTL.prototype.parse = function(object, data, loader) {
         {
             loader.updateParse(i/data.byteLength);
         }
-    }
+    }*/
     // this is an ascii STL file
     this.parseASCII(p, n, this.scan('uchar', data.byteLength - 5), loader);
     

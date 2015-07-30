@@ -188,7 +188,7 @@ DVT.loadHelper.prototype.updateLoad =function(oEvent) {//console.count('updateLo
  * @param oEvent the returned event
  */
 DVT.loadHelper.prototype.updateParse=function(percentComplete)
-{console.count('updateParse');
+{//console.count('updateParse');
     this._parseLine.animate(percentComplete);    
 };
 
