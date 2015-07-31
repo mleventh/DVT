@@ -11,7 +11,7 @@ test = function() {
   // load a .stl file
   var surface1 = new DVT.mesh();
   surface1.file = 'data/example.stl';
-  surface1.color = [1, 0, 0];
+  //surface1.color = [1, 0, 0];
   
   var surface2 = new DVT.mesh();
   surface2.file = 'http://x.babymri.org/?porsche.stl'
@@ -19,8 +19,7 @@ test = function() {
   
   // add the object
   test_renderer.add(surface1);
-  
   // .. and render it
   test_renderer.render();
-  
+ 
 };

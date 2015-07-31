@@ -130,14 +130,22 @@ DVT.parserSTL.prototype.parse = function(object, data, loader) {
     }
   }
   
-  var material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+  var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+  p.computeBoundingBox();
+  p.computeFaceNormals();
+  p.computeVertexNormals();
+  
+  n.computeBoundingBox();
+  n.computeFaceNormals();
+  n.computeVertexNormals();
+  
   var mesh1 = new THREE.Mesh(p, material);
   var mesh2 = new THREE.Mesh(n, material);
   mesh.add(mesh1, mesh2);
   
   // the object should be set up here, so let's fire a modified event
   object.THREEContainer = mesh;
-  console.log(mesh);
+  console.log(object.THREEContainer);
   object._loaded = true;
   object._locked = false;  
   object.dispatchEvent({type: 'PROCESSED', target: object});
