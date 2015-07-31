@@ -2,8 +2,7 @@
 goog.provide('DVT.mesh');
 
 // requires
-goog.require('DVT.object');
-
+goog.require('DVT.loaded');
 
 
 /**

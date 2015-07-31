@@ -1472,7 +1472,7 @@ goog.addDependency('../../../../../js/lib/progressbar.min.js', ['ProgressBar'], 
 goog.addDependency('../../../../../js/lib/three.min.js', ['THREE'], [], false);
 goog.addDependency('../../../../../js/objects/fiber.js', ['DVT.fiber'], ['DVT.loaded'], false);
 goog.addDependency('../../../../../js/objects/loaded.js', ['DVT.loaded'], ['DVT.object'], false);
-goog.addDependency('../../../../../js/objects/mesh.js', ['DVT.mesh'], ['DVT.object'], false);
+goog.addDependency('../../../../../js/objects/mesh.js', ['DVT.mesh'], ['DVT.loaded'], false);
 goog.addDependency('../../../../../js/objects/object.js', ['DVT.object'], ['DVT.base'], false);
 goog.addDependency('../../../../../js/visualizaion/renderer.js', ['DVT.renderer'], ['DVT.base', 'DVT.loader', 'goog.dom', 'goog.events'], false);
 goog.addDependency('../../../../../js/visualizaion/renderer2D.js', ['DVT.renderer2D'], ['DVT.renderer'], false);

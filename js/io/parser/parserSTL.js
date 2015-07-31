@@ -41,7 +41,7 @@ DVT.parserSTL.prototype.parse = function(object, data, loader) {
   
   this._data = data;
   this.loader = loader; 
-  surface = new THREE.Object3D();
+  mesh = new THREE.Object3D();
   
   var p = object._points;
   var n = object._normals;
@@ -61,7 +61,7 @@ DVT.parserSTL.prototype.parse = function(object, data, loader) {
     	
     );
         
-    n.vertices.push(  
+    n.morphNormals.push(  
     	new THREE.Vector3(data.byteLength, 0, 0)   	
     );
        
@@ -106,7 +106,7 @@ DVT.parserSTL.prototype.parse = function(object, data, loader) {
         	
         );
             
-        n.vertices.push(
+        n.morphNormals.push(
         	new THREE.Vector3(_triangleCount * 9, 0, 0)	
         );  
 
@@ -130,8 +130,14 @@ DVT.parserSTL.prototype.parse = function(object, data, loader) {
     }
   }
   
+  var material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+  var mesh1 = new THREE.Mesh(p, material);
+  var mesh2 = new THREE.Mesh(n, material);
+  mesh.add(mesh1, mesh2);
+  
   // the object should be set up here, so let's fire a modified event
-  object.THREEContainer = surface;
+  object.THREEContainer = mesh;
+  console.log(mesh);
   object._loaded = true;
   object._locked = false;  
   object.dispatchEvent({type: 'PROCESSED', target: object});
@@ -162,7 +168,7 @@ DVT.parserSTL.prototype.parseASCII = function(p, n, data, loader) {
   
   // store the beginning of a byte range
   var _rangeStart = 0;
-  
+   
   var i;
   for (i = 0; i < _length; i++) {
     
@@ -186,7 +192,7 @@ DVT.parserSTL.prototype.parseASCII = function(p, n, data, loader) {
         
         if (_normalsMode) {
           // add the normals 3x (for each vertex)
-          n.vertices.push(
+          n.morphNormals.push(
         		  new THREE.Vector3(x, y, z),
         		  new THREE.Vector3(x, y, z),
         		  new THREE.Vector3(x, y, z)
@@ -239,10 +245,8 @@ DVT.parserSTL.prototype.parseASCII = function(p, n, data, loader) {
  * 
  * 
  */
-DVT.parserSTL.prototype.parseBIN = function(p, n, triangleCount, loader) {
-	
-  this._loader = loader;	
-  
+DVT.parserSTL.prototype.parseBIN = function(p, n, triangleCount, loader) {	
+
   var i = 0;
   for (i = 0; i < triangleCount; i++) {
     
@@ -255,7 +259,7 @@ DVT.parserSTL.prototype.parseBIN = function(p, n, triangleCount, loader) {
     var _normalZ = _bytes[2];
     
     // add them
-    n.vertices.push(
+    n.morphNormals.push(
     		new THREE.Vector3(_normalX, _normalY, _normalZ),
     		new THREE.Vector3(_normalX, _normalY, _normalZ),
     		new THREE.Vector3(_normalX, _normalY, _normalZ)
