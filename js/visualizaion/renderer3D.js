@@ -922,7 +922,9 @@ DVT.renderer3D.prototype.update_ = function(object) {//console.count('renderer3D
     if (!existed) {
         this._objects.push(object); 
         this._scene.add(object.THREEContainer);
-        object.THREEContainer.position = new THREE.Vector3(150, 100, -150);
+        object.THREEContainer.translateX(50);
+        object.THREEContainer.translateY(50);
+        object.THREEContainer.translateZ(50);
         object._loader.finishRender();
         this.render();
         
