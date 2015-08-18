@@ -929,8 +929,9 @@ DVT.renderer3D.prototype.update_ = function(object) {//console.count('renderer3D
         var geometry = new THREE.BoxGeometry(10, 10, 10);
         var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
         var cube = new THREE.Mesh(geometry, material);
-        cube.position = new THREE.Vector3(175, 150, -150);
+        console.log(cube)
         this._scene.add(cube);
+        cube.moveTo(70, 68);
         
 
         //TODO remove after optimization tests are complete
