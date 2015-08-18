@@ -931,6 +931,9 @@ DVT.renderer3D.prototype.update_ = function(object) {//console.count('renderer3D
         var cube = new THREE.Mesh(geometry, material);
         console.log(cube)
         this._scene.add(cube);
+        cube.translateX(40);
+        cube.translateY(-10);
+        cube.translateZ(20);
         
 
         //TODO remove after optimization tests are complete
