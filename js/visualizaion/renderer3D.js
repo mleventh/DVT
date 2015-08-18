@@ -99,6 +99,7 @@ DVT.renderer3D = function() {
      */
 
     this._renderer =null
+        
 };
 // inherit from DVT.renderer
 goog.inherits(DVT.renderer3D, DVT.renderer);
@@ -165,8 +166,7 @@ DVT.renderer3D.prototype.init = function() {//console.count('renderer3D.init');
 
     this._renderer = new THREE.WebGLRenderer({ canvas: this._canvas, alpha : true} );
     this._renderer.setSize(this._width, this._height);
-
-
+    
     //this.animate();
     /*  //
      // Step2: Configure the context
@@ -920,13 +920,23 @@ DVT.renderer3D.prototype.update_ = function(object) {//console.count('renderer3D
     // add the object to the internal tree which reflects the rendering order
     // (based on opacity)
     if (!existed) {
-        this._objects.push(object);
+        this._objects.push(object); 
         this._scene.add(object.THREEContainer);
+        object.THREEContainer.position = new THREE.Vector3(150, 100, -150);
         object._loader.finishRender();
         this.render();
+        
+        var geometry = new THREE.BoxGeometry(10, 10, 10);
+        var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+        var cube = new THREE.Mesh(geometry, material);
+        cube.position = new THREE.Vector3(175, 150, -150);
+        this._scene.add(cube);
+        
 
         //TODO remove after optimization tests are complete
         this.rotate();
+        
+        console.log(object.THREEContainer)
     }
 
 };

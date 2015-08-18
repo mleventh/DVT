@@ -14,7 +14,7 @@ test = function() {
   //surface1.color = [1, 0, 0];
   
   var surface2 = new DVT.mesh();
-  surface2.file = 'http://x.babymri.org/?porsche.stl'
+  surface2.file = 'data/cube.stl';
   surface2.color = [1, 0, 0];	  
   
   // add the object

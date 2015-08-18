@@ -5,7 +5,7 @@ goog.provide('DVT.parserSTL');
 goog.require('DVT.parser');
 goog.require('DVT.object');
 goog.require('THREE');
-//goog.require('DVT.loader');
+
 
 /**
  * Create a parser for the .STL format. ASCII or binary format is supported.
@@ -41,10 +41,10 @@ DVT.parserSTL.prototype.parse = function(object, data, loader) {
   
   this._data = data;
   this.loader = loader; 
-  mesh = new THREE.Object3D();
+  mesh = new THREE.Mesh();
   
   var p = object._points;
-  var n = object._normals;
+  //var n = object._normals;
   
   // parse 5 bytes
   var _ascii_tag = this.parseChars(this.scan('uchar', 5));
@@ -54,34 +54,18 @@ DVT.parserSTL.prototype.parse = function(object, data, loader) {
     
     // allocate memory using a good guess
     object._points = p = new THREE.Geometry();
-    object._normals = n = new THREE.Geometry();
+    //object._normals = n = new THREE.Geometry();
+    
+    var byteVect = new THREE.Vector3(data.byteLength, 0, 0);
        
     p.vertices.push(
-    	new THREE.Vector3(data.byteLength, 0, 0)
+    	
+    		byteVect
     	
     );
-        
-    n.morphNormals.push(  
-    	new THREE.Vector3(data.byteLength, 0, 0)   	
-    );
-       
-    /*var i;
-    var updateCheck = 0;
-    if(data.byteLength === Infinity) {
-        updateCheck = 100000;
-    }
-    else {
-        updateCheck = Math.ceil(data.byteLength / 100);
-    }
-
-    for (i = 0; i < data.byteLength; i++) {
-        if(i%updateCheck === 0)
-        {
-            loader.updateParse(i/data.byteLength);
-        }
-    }*/
+            
     // this is an ascii STL file
-    this.parseASCII(p, n, this.scan('uchar', data.byteLength - 5), loader);
+    this.parseASCII(p, this.scan('uchar', data.byteLength - 5), loader);
     
   } else {	  
 	  
@@ -99,19 +83,21 @@ DVT.parserSTL.prototype.parse = function(object, data, loader) {
     
     // allocate the exact amount of memory
     object._points = p = new THREE.Geometry();
-    object._normals = n = new THREE.Geometry();
+    //object._normals = n = new THREE.Geometry();
+    
+    var triangleVect = new THREE.Vector3(_triangleCount * 9, 0, 0);
     
     p.vertices.push(
-        	new THREE.Vector3(_triangleCount * 9, 0, 0)
+        	triangleVect
         	
         );
             
-        n.morphNormals.push(
+        /*n.morphNormals.push(
         	new THREE.Vector3(_triangleCount * 9, 0, 0)	
-        );  
+        );  */
 
     // parse the bytes
-    this.parseBIN(p, n, _triangleCount, loader);
+    this.parseBIN(p, _triangleCount, loader);
     
     var i;
     var updateCheck = 0;
@@ -131,21 +117,16 @@ DVT.parserSTL.prototype.parse = function(object, data, loader) {
   }
   
   var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
-  p.computeBoundingBox();
+ /* p.computeBoundingBox();
   p.computeFaceNormals();
-  p.computeVertexNormals();
+  p.computeVertexNormals();*/
   
-  n.computeBoundingBox();
-  n.computeFaceNormals();
-  n.computeVertexNormals();
-  
-  var mesh1 = new THREE.Mesh(p, material);
-  var mesh2 = new THREE.Mesh(n, material);
-  mesh.add(mesh1, mesh2);
+  object.THREEContainer = mesh;  
+  mesh = new THREE.Mesh(p, material);
+  //mesh.localToWorld(byteVect);
+  mesh.localToWorld(triangleVect); 
   
   // the object should be set up here, so let's fire a modified event
-  object.THREEContainer = mesh;
-  console.log(object.THREEContainer);
   object._loaded = true;
   object._locked = false;  
   object.dispatchEvent({type: 'PROCESSED', target: object});
@@ -161,7 +142,7 @@ DVT.parserSTL.prototype.parse = function(object, data, loader) {
  * @param {!Uint8Array} data The data to parse.
  * @protected
  */
-DVT.parserSTL.prototype.parseASCII = function(p, n, data, loader) {
+DVT.parserSTL.prototype.parseASCII = function(p, data, loader) {
   
   var _length = data.length;
  
@@ -178,8 +159,9 @@ DVT.parserSTL.prototype.parseASCII = function(p, n, data, loader) {
   var _rangeStart = 0;
    
   var i;
+  
   for (i = 0; i < _length; i++) {
-    
+	  
     if (data[i] == 10) {    	
       
       // the current byte is a line break
@@ -198,16 +180,21 @@ DVT.parserSTL.prototype.parseASCII = function(p, n, data, loader) {
         var y = parseFloat(_numbers[1]);
         var z = parseFloat(_numbers[2]);
         
+        var vector=new THREE.Vector3( x,  y, z )
+        
         if (_normalsMode) {
           // add the normals 3x (for each vertex)
           n.morphNormals.push(
-        		  new THREE.Vector3(x, y, z),
-        		  new THREE.Vector3(x, y, z),
-        		  new THREE.Vector3(x, y, z)
+        		  vector,
+        		  vector,
+        		  vector
         		  );
         } else {
           // add the vertices
-          p.vertices.push(new THREE.Vector3(x, y, z));
+          p.vertices.push(
+    		  	  vector,
+    		  	  vector,
+    		  	  vector);
         }
               
         
@@ -253,7 +240,7 @@ DVT.parserSTL.prototype.parseASCII = function(p, n, data, loader) {
  * 
  * 
  */
-DVT.parserSTL.prototype.parseBIN = function(p, n, triangleCount, loader) {	
+DVT.parserSTL.prototype.parseBIN = function(p, triangleCount, loader) {	
 
   var i = 0;
   for (i = 0; i < triangleCount; i++) {
@@ -266,24 +253,36 @@ DVT.parserSTL.prototype.parseBIN = function(p, n, triangleCount, loader) {
     var _normalY = _bytes[1];
     var _normalZ = _bytes[2];
     
+    var vertexVector1 = new THREE.Vector3(_bytes[3], _bytes[4], _bytes[5]);
+    var vertexVector2 = new THREE.Vector3(_bytes[6], _bytes[7], _bytes[8]);
+    var vertexVector3 = new THREE.Vector3(_bytes[9], _bytes[10], _bytes[11]);
+    
+    mesh.localToWorld(vertexVector1);
+    mesh.localToWorld(vertexVector2);
+    mesh.localToWorld(vertexVector3);
+
+    
+    //var normVect = new THREE.Vector3(_normalX, _normalY, _normalZ)
+    
     // add them
-    n.morphNormals.push(
-    		new THREE.Vector3(_normalX, _normalY, _normalZ),
-    		new THREE.Vector3(_normalX, _normalY, _normalZ),
-    		new THREE.Vector3(_normalX, _normalY, _normalZ)
-    		)		
+    /*n.morphNormals.push(
+    		normVect,
+    		normVect,
+    		normVect
+    		)*/		
     
     // now the vertices
     p.vertices.push(
-    		new THREE.Vector3(_bytes[3], _bytes[4], _bytes[5]),
-    		new THREE.Vector3(_bytes[6], _bytes[7], _bytes[8]),
-    		new THREE.Vector3(_bytes[9], _bytes[10], _bytes[11])
+    		vertexVector1,
+    		vertexVector2,
+    		vertexVector3
     		)
     
     // jump 2 bytes
     this._dataPointer += 2;
     
   }
+
 
 };
 
