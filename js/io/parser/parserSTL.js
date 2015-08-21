@@ -121,11 +121,11 @@ DVT.parserSTL.prototype.parse = function(object, data, loader) {
   p.computeFaceNormals();
   p.computeVertexNormals();*/
   
+  var translation = new THREE.Vector3(100,0,0); 
+  THREEx.GeometryUtils.translate(p, translation);
+  
   object.THREEContainer = mesh;  
   mesh = new THREE.Mesh(p, material);
-  mesh.translateX(-25);
-  mesh.translateY(-65);
-  mesh.translateZ(-50);
   mesh.localToWorld(triangleVect); 
   
   // the object should be set up here, so let's fire a modified event
