@@ -121,8 +121,7 @@ DVT.parserSTL.prototype.parse = function(object, data, loader) {
   p.computeFaceNormals();
   p.computeVertexNormals();*/
   
-  var translation = new THREE.Vector3(100,0,0); 
-  THREEx.GeometryUtils.translate(p, translation);
+  THREE.GeometryUtils.center(p);
   
   object.THREEContainer = mesh;  
   mesh = new THREE.Mesh(p, material);
