@@ -125,7 +125,7 @@ DVT.parserSTL.prototype.parse = function(object, data, loader) {
   
   object.THREEContainer = mesh;  
   mesh = new THREE.Mesh(p, material);
-  mesh.localToWorld(triangleVect); 
+  //mesh.localToWorld(triangleVect); 
   mesh.position.set(5, 5, 5);
   
   // the object should be set up here, so let's fire a modified event
@@ -259,9 +259,9 @@ DVT.parserSTL.prototype.parseBIN = function(p, triangleCount, loader) {
     var vertexVector2 = new THREE.Vector3(_bytes[6], _bytes[7], _bytes[8]);
     var vertexVector3 = new THREE.Vector3(_bytes[9], _bytes[10], _bytes[11]);
     
-    mesh.localToWorld(vertexVector1);
+    /*mesh.localToWorld(vertexVector1);
     mesh.localToWorld(vertexVector2);
-    mesh.localToWorld(vertexVector3);
+    mesh.localToWorld(vertexVector3);*/
 
     
     //var normVect = new THREE.Vector3(_normalX, _normalY, _normalZ)
