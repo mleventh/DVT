@@ -91,6 +91,8 @@ DVT.parserSTL.prototype.parse = function(object, data, loader) {
     
     var triangleVect = new THREE.Vector3(x * 9, y * 9, z * 9);
     
+    console.log(x, y, z)
+    
     p.vertices.push(
         	triangleVect
         	
