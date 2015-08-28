@@ -85,7 +85,11 @@ DVT.parserSTL.prototype.parse = function(object, data, loader) {
     object._points = p = new THREE.Geometry();
     //object._normals = n = new THREE.Geometry();
     
-    var triangleVect = new THREE.Vector3(_triangleCount * 9, _triangleCount * 9, _triangleCount * 9);
+    var x = parseFloat(_triangleCount[0]);
+    var y = parseFloat(_triangleCount[1]);
+    var z = parseFloat(_triangleCount[2]);
+    
+    var triangleVect = new THREE.Vector3(x * 9, y * 9, z * 9);
     
     p.vertices.push(
         	triangleVect
@@ -126,7 +130,7 @@ DVT.parserSTL.prototype.parse = function(object, data, loader) {
   object.THREEContainer = mesh;  
   mesh = new THREE.Mesh(p, material);
   //mesh.localToWorld(triangleVect); 
-  mesh.position.set(5, 5, 5);
+  mesh.position.set(15, 15, -15);
   
   // the object should be set up here, so let's fire a modified event
   object._loaded = true;
