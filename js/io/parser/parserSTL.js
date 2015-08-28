@@ -85,9 +85,9 @@ DVT.parserSTL.prototype.parse = function(object, data, loader) {
     object._points = p = new THREE.Geometry();
     //object._normals = n = new THREE.Geometry();
     
-    var x = parseFloat(_triangleCount[0]);
-    var y = parseFloat(_triangleCount[1]);
-    var z = parseFloat(_triangleCount[2]);
+    var x = parseFloat(_triangleCount);
+    var y = parseFloat(_triangleCount);
+    var z = parseFloat(_triangleCount);
     
     var triangleVect = new THREE.Vector3(x * 9, y * 9, z * 9);
     
