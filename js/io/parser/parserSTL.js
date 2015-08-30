@@ -132,8 +132,7 @@ DVT.parserSTL.prototype.parse = function(object, data, loader) {
   object.THREEContainer = mesh;  
   mesh = new THREE.Mesh(p, material);
   //mesh.localToWorld(triangleVect); 
-  mesh.position.set(15, 15, -15);
-  
+
   // the object should be set up here, so let's fire a modified event
   object._loaded = true;
   object._locked = false;  
