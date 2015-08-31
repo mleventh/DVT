@@ -925,14 +925,14 @@ DVT.renderer3D.prototype.update_ = function(object) {//console.count('renderer3D
         object._loader.finishRender();
         this.render();
         
-        var geometry = new THREE.BoxGeometry(10, 10, 10);
+        /*var geometry = new THREE.BoxGeometry(10, 10, 10);
         var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
         var cube = new THREE.Mesh(geometry, material);
         console.log(cube)
         this._scene.add(cube);
         cube.translateX(40);
         cube.translateY(10);
-        cube.translateZ(20);
+        cube.translateZ(20);*/
         
 
         //TODO remove after optimization tests are complete
