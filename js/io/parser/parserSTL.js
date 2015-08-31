@@ -89,7 +89,7 @@ DVT.parserSTL.prototype.parse = function(object, data, loader) {
     var y = parseFloat(_triangleCount)/40000;
     var z = parseFloat(_triangleCount)/40000;*/
     
-    var triangleVect = new THREE.Vector3(p.vertices.x * 9, p.vertices.y * 9, p.vertices.z * 9);
+    var triangleVect = new THREE.Vector3(p.vertices.x, p.vertices.y, p.vertices.z);
     
     p.vertices.push(
         	triangleVect
