@@ -22,6 +22,6 @@ test = function() {
   // .. and render it
   test_renderer.render();
   
-  console.log('you there mate?')
+  console.log(surface1)
  
 };
