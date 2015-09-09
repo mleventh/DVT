@@ -9,6 +9,7 @@ goog.addDependency('../../../../../js/io/loader/loader.js', ['DVT.loader'], ['DV
 goog.addDependency('../../../../../js/io/parser/parser.js', ['DVT.parser'], ['DVT.base'], false);
 goog.addDependency('../../../../../js/io/parser/parserSTL.js', ['DVT.parserSTL'], ['DVT.object', 'DVT.parser', 'THREE'], false);
 goog.addDependency('../../../../../js/io/parser/parserTRK.js', ['DVT.parserTRK'], ['DVT.parser', 'THREE'], false);
+goog.addDependency('../../../../../js/io/parser/parserTRKParticle.js', ['DVT.parserTRKParticle'], ['DVT.parser', 'THREE'], false);
 goog.addDependency('../../../../../js/lib/OrbitControls.js', ['orbitControls'], [], false);
 goog.addDependency('../../../../../js/lib/bootstrap.min.js', ['bootstrap'], [], false);
 goog.addDependency('../../../../../js/lib/closure-library-master/closure/goog/a11y/aria/announcer.js', ['goog.a11y.aria.Announcer'], ['goog.Disposable', 'goog.Timer', 'goog.a11y.aria', 'goog.a11y.aria.LivePriority', 'goog.a11y.aria.State', 'goog.dom', 'goog.dom.TagName', 'goog.object'], false);
